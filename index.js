@@ -16,7 +16,6 @@ client.commands = new Collection();
 
 const commandFiles = fs.readdirSync('./commands').filter(f => f.endsWith('.js'));
 
-const commandFiles = fs.readdirSync('./commands').filter(f => f.endsWith('.js'));
 
 for (const file of commandFiles) {
   try {
