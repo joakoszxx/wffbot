@@ -1,6 +1,6 @@
+console.log("🔥 NUEVO INDEX CARGADO");
 const { Client, GatewayIntentBits, Collection, Partials } = require('discord.js');
 const fs = require('fs');
-console.log("TOKEN:", process.env.TOKEN);
 
 const client = new Client({
   intents: [
@@ -15,9 +15,25 @@ const client = new Client({
 client.commands = new Collection();
 
 const commandFiles = fs.readdirSync('./commands').filter(f => f.endsWith('.js'));
+
+const commandFiles = fs.readdirSync('./commands').filter(f => f.endsWith('.js'));
+
 for (const file of commandFiles) {
-  const cmd = require(`./commands/${file}`);
-  client.commands.set(cmd.data.name, cmd);
+  try {
+    const cmd = require(`./commands/${file}`);
+
+    if (!cmd || !cmd.data || !cmd.data.name) {
+      console.log("❌ INVALID COMMAND FILE:", file, cmd);
+      continue;
+    }
+
+    client.commands.set(cmd.data.name, cmd);
+    console.log("✅ LOADED:", file);
+
+  } catch (err) {
+    console.log("💥 ERROR LOADING:", file);
+    console.error(err);
+  }
 }
 
 client.on('interactionCreate', async interaction => {
@@ -37,7 +53,6 @@ client.on('interactionCreate', async interaction => {
 
   if (interaction.isButton()) {
     const data = JSON.parse(interaction.customId);
-    const fs = require('fs');
     let storage = JSON.parse(fs.readFileSync('./storage.json'));
 
     let newEmbed;
@@ -76,5 +91,8 @@ client.on('interactionCreate', async interaction => {
     });
   }
 });
+
+process.on('unhandledRejection', console.error);
+process.on('uncaughtException', console.error);
 
 client.login(process.env.TOKEN);
