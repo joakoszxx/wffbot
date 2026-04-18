@@ -1,5 +1,6 @@
 const { REST, Routes } = require('discord.js');
 const fs = require('fs');
+const {GUILD_ID} = "1494859005061894369";
 
 const commands = [];
 const files = fs.readdirSync('./commands');
@@ -13,7 +14,7 @@ const rest = new REST({ version: '10' }).setToken(process.env.TOKEN);
 
 (async () => {
   await rest.put(
-    Routes.applicationCommands(process.env.CLIENT_ID),
+    Routes.applicationGuildCommands(CLIENT_ID, GUILD_ID),
     { body: commands }
   );
 })();
