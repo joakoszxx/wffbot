@@ -5,7 +5,7 @@ const app = express();
 app.get('/', (req, res) => {
   res.send('Bot is running');
 });
-
+// hola webserver para evitar que glitch cierre el bot por inactividad
 app.listen(process.env.PORT || 3000, () => {
   console.log('Web server activo');
 });
